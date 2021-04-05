@@ -41,6 +41,7 @@ export default function Home () {
     onSubmit: async (values, form) => {
       try {
         const user = await firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
+        console.log('OK:', user)
       } catch (error) {
         console.error('ERROR:', error)
       }

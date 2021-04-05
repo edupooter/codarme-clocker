@@ -13,9 +13,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  FormHelperText,
-  InputGroup,
-  InputLeftAddon
+  FormHelperText
 } from '@chakra-ui/react'
 
 import { Logo } from '../components'
@@ -24,8 +22,7 @@ import firebase from '../config/firebase'
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('E-mail inválido').required('Preenchimento obrigatório'),
-  password: yup.string().required('Preenchimento obrigatório'),
-  username: yup.string().required('Preenchimento obrigatório')
+  password: yup.string().required('Preenchimento obrigatório')
 })
 
 export default function Home () {
@@ -42,6 +39,7 @@ export default function Home () {
     onSubmit: async (values, form) => {
       try {
         const user = await firebase.auth().signInWithEmailAndPassword(values.email, values.password)
+        console.log('OK:', user)
       } catch (error) {
         console.error('ERROR:', error)
       }
