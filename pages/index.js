@@ -1,9 +1,9 @@
-import { Logo } from '../components/Logo/logo'
+import { Logo } from './../components'
 
 export default function Home () {
   return (
     <div>
-      Clocker.io
+      <Logo />
     </div>
   )
 }
