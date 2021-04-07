@@ -12,22 +12,19 @@ import {
   FormControl,
   FormLabel,
   Input,
-  FormHelperText,
-  InputGroup,
-  InputLeftAddon
+  FormHelperText
 } from '@chakra-ui/react'
 
-import { Logo } from '../components'
+import { Logo } from '../Logo'
 
-import firebase from '../config/firebase'
+import firebase, { persistenceMode } from '../../config/firebase'
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('E-mail inválido').required('Preenchimento obrigatório'),
-  password: yup.string().required('Preenchimento obrigatório'),
-  username: yup.string().required('Preenchimento obrigatório')
+  password: yup.string().required('Preenchimento obrigatório')
 })
 
-export default function Home () {
+export const Login = () => {
   const {
     values,
     errors,
@@ -39,8 +36,10 @@ export default function Home () {
     isLoading
   } = useFormik({
     onSubmit: async (values, form) => {
+      firebase.auth().setPersistence(persistenceMode)
+
       try {
-        const user = await firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
+        const user = await firebase.auth().signInWithEmailAndPassword(values.email, values.password)
         console.log('OK:', user)
       } catch (error) {
         console.error('ERROR:', error)
@@ -78,14 +77,6 @@ export default function Home () {
           {touched.password && <FormHelperText textColor='#e74c3c'>{errors.password}</FormHelperText>}
         </FormControl>
 
-        <FormControl id='username' p={4} isRequired>
-          <InputGroup size='lg'>
-            <InputLeftAddon>clocker.website</InputLeftAddon>
-            <Input type='username' value={values.username} onChange={handleChange} onBlur={handleBlur} />
-          </InputGroup>
-          {touched.username && <FormHelperText textColor='#e74c3c'>{errors.username}</FormHelperText>}
-        </FormControl>
-
         <Box p={4}>
           <Button width='100%' colorScheme='blue' onClick={handleSubmit} isLoading={isSubmitting}>
             Entrar
@@ -93,8 +84,8 @@ export default function Home () {
         </Box>
       </Box>
 
-      <Link href='/'>
-        Já tem uma conta? Entre aqui
+      <Link href='/signup'>
+        Ainda não tem uma conta? Registre-se aqui
       </Link>
 
     </Container>
