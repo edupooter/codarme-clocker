@@ -2,19 +2,18 @@ import { useEffect, useState } from 'react'
 
 import { Login, Agenda } from '../components/'
 
-import firebase from '../config/firebase'
+import { firebaseClient } from '../config/firebase'
 
 import { Container, Spinner} from '@chakra-ui/react'
 
 export default function Home () {
-  // const authenticatedUser = firebase.auth().currentUser
   const [auth, setAuth] = useState({
     loading: true,
     user: false
   })
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
+    firebaseClient.auth().onAuthStateChanged(user => {
       setAuth({
         loading: false,
         user
