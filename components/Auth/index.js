@@ -29,20 +29,18 @@ export const signup = async ({ email, password, username }) => {
 
     const token = await user.getIdToken()
 
-    // const { data } = await axios({
-    //   method: 'post',
-    //   url: '/api/profile',
-    //   headers: {
-    //     Authentication: `Bearer ${user.getToken()}`
-    //   },
-    //   data: {
-    //     username
-    //   }
-    // })
+    const { data } = await axios({
+      method: 'post',
+      url: '/api/profile',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      data: {
+        username
+      }
+    })
 
-    // console.log(data)
-
-    // setupProfile(token, username)
+    console.log(data)
 
   } catch (error) {
     console.error('SIGNUP ERROR:', error)
