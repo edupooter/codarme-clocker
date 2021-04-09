@@ -1,25 +1,33 @@
-import { Box, Button, Container } from '@chakra-ui/react'
-
 import { useRouter } from 'next/router'
 
 import { useEffect, useState } from 'react'
 
 import axios from 'axios'
 
+import { addDays, subDays } from 'date-fns'
+
 import { useFetch } from '@refetty/react'
+
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
+
+import { Box, Button, Container, IconButton } from '@chakra-ui/react'
+
+// import { getToken } from '../config/firebase/client'
 
 import { Logo, useAuth, formatDate } from '../components'
 
-const getAgenda = ({ token, when }) => axios({
-  method: 'get',
-  url: '/api/agenda',
-  params: {
-    when
-  },
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
-})
+const getAgenda = async (when) => {
+  // const token = await getToken
+
+  axios({
+    method: 'get',
+    url: '/api/agenda',
+    params: { when },
+    headers: {
+      Authorization: `Bearer `
+    }
+  })
+}
 
 const Header = ({ children }) => (
   <Box p={4} display='flex' alignItems='center' justifyContent='space-between'>
@@ -27,18 +35,26 @@ const Header = ({ children }) => (
   </Box>
 )
 
-export default function Agenda () {
+export default function Agenda() {
   const [auth, { logout }] = useAuth()
 
   const router = useRouter()
 
   const [when, setWhen] = useState(() => new Date())
 
-  // const [data, {loading, status, error}, fetch] = useFetch(() => getAgenda(when))
+  const [data, { loading, status, error }, fetch] = useFetch(getAgenda, { lazy: true })
+
+  const addDay = () => setWhen(prevState => addDays(prevState, 1))
+
+  const removeDay = () => setWhen(prevState => subDays(prevState, 1))
 
   useEffect(() => {
     !auth.user && router.push('/')
   }, [auth.user])
+
+  useEffect(() => {
+    fetch(when)
+  }, [when])
 
   return (
     <Container>
@@ -48,7 +64,13 @@ export default function Agenda () {
           Sair
         </Button>
       </Header>
-      <Box>{formatDate(new Date, 'PPPP')}</Box>
+      <Box mt={8} display='flex' alignItems='center'>
+        <IconButton icon={<ChevronLeftIcon />} bg='transparent' onClick={removeDay} />
+        <Box flex={1} textAlign='center'>
+          {formatDate(when, 'PPPP')}
+        </Box>
+        <IconButton icon={<ChevronRightIcon />} bg='transparent' onClick={addDay} />
+      </Box>
     </Container>
   )
 }
