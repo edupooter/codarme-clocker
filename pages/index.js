@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 
 import { useAuth } from '../components/'
 
-export default function Home() {
+export default function Home () {
   const [auth] = useAuth()
 
   const router = useRouter()

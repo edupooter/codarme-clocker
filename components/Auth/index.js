@@ -15,7 +15,6 @@ export const login = async ({ email, password }) => {
     await firebaseClient.auth().signInWithEmailAndPassword(email, password)
 
     return firebaseClient.auth().currentUser
-
   } catch (error) {
     console.error('LOGIN ERROR:', error)
   }
@@ -39,9 +38,6 @@ export const signup = async ({ email, password, username }) => {
         username
       }
     })
-
-    console.log(data)
-
   } catch (error) {
     console.error('SIGNUP ERROR:', error)
   }

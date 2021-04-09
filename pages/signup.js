@@ -6,7 +6,7 @@ import * as yup from 'yup'
 
 import { useEffect } from 'react'
 
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 
 import {
   Container,
@@ -29,7 +29,7 @@ const validationSchema = yup.object().shape({
   username: yup.string().required('Preenchimento obrigatório')
 })
 
-export default function Home() {
+export default function Home () {
   const [auth, { signup }] = useAuth()
 
   const router = useRouter()
