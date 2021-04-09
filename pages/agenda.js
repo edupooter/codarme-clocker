@@ -12,19 +12,19 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 
 import { Box, Button, Container, IconButton } from '@chakra-ui/react'
 
-// import { getToken } from '../config/firebase/client'
-
 import { Logo, useAuth, formatDate } from '../components'
 
+import { getToken } from '../config/firebase/client'
+
 const getAgenda = async (when) => {
-  // const token = await getToken
+  const token = await getToken()
 
   axios({
     method: 'get',
     url: '/api/agenda',
     params: { when },
     headers: {
-      Authorization: `Bearer `
+      Authorization: `Bearer ${token}`
     }
   })
 }
@@ -35,7 +35,7 @@ const Header = ({ children }) => (
   </Box>
 )
 
-export default function Agenda() {
+export default function Agenda () {
   const [auth, { logout }] = useAuth()
 
   const router = useRouter()

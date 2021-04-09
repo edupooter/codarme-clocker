@@ -9,12 +9,12 @@ const profile = db.collection('profiles')
 export default async (req, res) => {
   const [, token] = req.headers.authorization.split(' ')
 
-  const { user_id } = await firebaseServer.auth().verifyIdToken(token)
+  const { user_id: userId } = await firebaseServer.auth().verifyIdToken(token)
 
   const username = req.body.username
 
   profile.doc(username).set({
-    userId: user_id,
+    userId,
     username
   })
 
