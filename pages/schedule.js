@@ -12,7 +12,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 
 import { Box, Button, Container, IconButton, SimpleGrid, Spinner } from '@chakra-ui/react'
 
-import { Logo, useAuth, formatDate } from '../components'
+import { Logo, useAuth, formatDate, TimeBlock } from '../components'
 
 const getSchedule = async (when) => axios({
   method: 'get',
@@ -26,7 +26,7 @@ const Header = ({ children }) => (
   </Box>
 )
 
-export default function Agenda () {
+export default function Schedule () {
   const [auth, { logout }] = useAuth()
 
   const router = useRouter()
@@ -38,14 +38,6 @@ export default function Agenda () {
   const addDay = () => setWhen(prevState => addDays(prevState, 1))
 
   const removeDay = () => setWhen(prevState => subDays(prevState, 1))
-
-  const TimeBlock = ({ time }) => {
-    return (
-      <Button p={8} bg='blue.500' color='white'>
-        {time}
-      </Button>
-    )
-  }
 
   useEffect(() => {
     fetch(when)
