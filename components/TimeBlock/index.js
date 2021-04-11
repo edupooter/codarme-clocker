@@ -86,7 +86,7 @@ export const TimeBlock = ({ time, date, disabled }) => {
         onClose={toggle}
         onComplete={handleSubmit}
         isSubmitting={isSubmitting}
-      >
+                    >
         <>
           <Input
             label='Nome:'
@@ -108,6 +108,7 @@ export const TimeBlock = ({ time, date, disabled }) => {
             error={errors.phone}
             value={values.phone}
             placeholder='(99) 99999-9999'
+            mask={['(99) 9999-9999', '(99) 9 9999-9999']}
             onChange={handleChange}
             onBlur={handleBlur}
             size='lg'
