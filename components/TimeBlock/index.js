@@ -28,7 +28,7 @@ const setSchedule = async data => axios({
   }
 })
 
-const ModalTimeBlock = ({ isOpen, onClose, onComplete, children }) => (
+const ModalTimeBlock = ({ isOpen, onClose, onComplete, isSubmitting, children }) => (
   <Modal isOpen={isOpen} onClose={onClose}>
     <ModalOverlay />
     <ModalContent>
@@ -41,10 +41,8 @@ const ModalTimeBlock = ({ isOpen, onClose, onComplete, children }) => (
       </ModalBody>
 
       <ModalFooter>
-        <Button variant="ghost" onClick={onClose}>
-          Cancelar
-        </Button>
-        <Button colorScheme="blue" ml={3} onClick={onComplete}>
+        {!isSubmitting && <Button variant="ghost" onClick={onClose}>Cancelar</Button>}
+        <Button colorScheme="blue" ml={3} onClick={onComplete} isLoading={isSubmitting}>
           Reservar horário
         </Button>
       </ModalFooter>
@@ -57,8 +55,15 @@ export const TimeBlock = ({ time }) => {
 
   const toggle = () => setIsOpen(prevState => !prevState)
 
-  const { values, handleSubmit, handleChange, handleBlur, errors, touched } = useFormik({
-    onSubmit: (values) => setSchedule({...values, when: time}),
+  const { values, handleSubmit, handleChange, handleBlur, errors, touched, isSubmitting } = useFormik({
+    onSubmit: async (values) => {
+      try {
+        await setSchedule({ ...values, when: time })
+        toggle()
+      } catch (error) {
+        console.error(error)
+      }
+    },
     initialValues: {
       name: '',
       phone: ''
@@ -73,7 +78,12 @@ export const TimeBlock = ({ time }) => {
     <Button p={8} bg='blue.500' color='white' onClick={toggle}>
       {time}
 
-      <ModalTimeBlock isOpen={isOpen} onClose={toggle} onComplete={handleSubmit}>
+      <ModalTimeBlock
+        isOpen={isOpen}
+        onClose={toggle}
+        onComplete={handleSubmit}
+        isSubmitting={isSubmitting}
+        >
         <>
           <Input
             label='Nome:'
@@ -85,6 +95,7 @@ export const TimeBlock = ({ time }) => {
             onChange={handleChange}
             onBlur={handleBlur}
             size='lg'
+            disabled={isSubmitting}
             />
 
           <Input
@@ -98,6 +109,7 @@ export const TimeBlock = ({ time }) => {
             onBlur={handleBlur}
             size='lg'
             type='tel'
+            disabled={isSubmitting}
             />
         </>
       </ModalTimeBlock>
