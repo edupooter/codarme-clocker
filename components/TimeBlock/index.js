@@ -17,13 +17,16 @@ import {
   ModalFooter
 } from '@chakra-ui/react'
 
+import { format } from 'date-fns'
+
 import { Input } from '../Input'
 
-const setSchedule = async data => axios({
+const setSchedule = async ({ date, ...data }) => axios({
   method: 'post',
   url: '/api/schedule',
   data: {
     ...data,
+    date: format(date, 'yyyy-MM-dd'),
     username: window.location.pathname.replace('/', '')
   }
 })
@@ -41,8 +44,8 @@ const ModalTimeBlock = ({ isOpen, onClose, onComplete, isSubmitting, children })
       </ModalBody>
 
       <ModalFooter>
-        {!isSubmitting && <Button variant="ghost" onClick={onClose}>Cancelar</Button>}
-        <Button colorScheme="blue" ml={3} onClick={onComplete} isLoading={isSubmitting}>
+        {!isSubmitting && <Button variant='ghost' onClick={onClose}>Cancelar</Button>}
+        <Button colorScheme='blue' ml={3} onClick={onComplete} isLoading={isSubmitting}>
           Reservar horário
         </Button>
       </ModalFooter>
@@ -50,7 +53,7 @@ const ModalTimeBlock = ({ isOpen, onClose, onComplete, isSubmitting, children })
   </Modal>
 )
 
-export const TimeBlock = ({ time }) => {
+export const TimeBlock = ({ time, date }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => setIsOpen(prevState => !prevState)
@@ -58,7 +61,7 @@ export const TimeBlock = ({ time }) => {
   const { values, handleSubmit, handleChange, handleBlur, errors, touched, isSubmitting } = useFormik({
     onSubmit: async (values) => {
       try {
-        await setSchedule({ ...values, when: time })
+        await setSchedule({ ...values, time, date })
         toggle()
       } catch (error) {
         console.error(error)
@@ -83,7 +86,7 @@ export const TimeBlock = ({ time }) => {
         onClose={toggle}
         onComplete={handleSubmit}
         isSubmitting={isSubmitting}
-        >
+      >
         <>
           <Input
             label='Nome:'
@@ -96,7 +99,7 @@ export const TimeBlock = ({ time }) => {
             onBlur={handleBlur}
             size='lg'
             disabled={isSubmitting}
-            />
+          />
 
           <Input
             label='Telefone:'
@@ -110,7 +113,7 @@ export const TimeBlock = ({ time }) => {
             size='lg'
             type='tel'
             disabled={isSubmitting}
-            />
+          />
         </>
       </ModalTimeBlock>
     </Button>
