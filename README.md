@@ -1,3 +1,9 @@
+## Projeto criado com base no Webnário "Semana Full Stack sem custo" da Codar.me.
+
+Criei e disponibilizei um domínio com esta aplicação rodando por meio de CI:
+
+[https://clocker.website/](https://clocker.website/)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
